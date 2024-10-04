@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:jump_scare_app/utils/utils.dart';
+
 Movie movieFromJson(String str) => Movie.fromJson(json.decode(str));
 
 String movieToJson(Movie data) => json.encode(data.toJson());
@@ -41,7 +43,7 @@ class JumpScare {
   });
 
   factory JumpScare.fromJson(Map<String, dynamic> json) => JumpScare(
-        time: parseDuration(json["time"]),
+        time: stringToDuration(json["time"]),
         description: json["description"],
         type: json["type"] == "major"
             ? JumpScareType.major
@@ -59,14 +61,6 @@ class JumpScare {
                 ? "minor"
                 : "",
       };
-}
-
-Duration parseDuration(String s) {
-  final parts = s.split(":");
-  final hours = int.parse(parts[0]);
-  final minutes = int.parse(parts[1]);
-  final seconds = int.parse(parts[2]);
-  return Duration(hours: hours, minutes: minutes, seconds: seconds);
 }
 
 enum JumpScareType { unknown, major, minor }

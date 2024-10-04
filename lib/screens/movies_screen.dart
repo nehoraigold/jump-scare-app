@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-import "package:jump_scare_app/movie_tile.dart";
+import "package:jump_scare_app/components/movie_tile.dart";
 
 class MoviesScreen extends StatelessWidget {
   final Future<List<String>> movies;

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jump_scare_app/model/movie.dart';
 
 class BigCard extends StatelessWidget {
   const BigCard({
     super.key,
-    required this.movie,
+    required this.value,
   });
 
-  final Movie movie;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +21,9 @@ class BigCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
-          movie.title,
+          value,
           style: style,
-          semanticsLabel: movie.title,
+          semanticsLabel: value,
         ),
       ),
     );
