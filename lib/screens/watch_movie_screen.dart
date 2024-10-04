@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:jump_scare_app/utils/utils.dart';
 import 'package:quiver/async.dart';
 
+import 'package:jump_scare_app/utils/utils.dart';
 import 'package:jump_scare_app/model/movie.dart';
 import 'package:jump_scare_app/components/jump_scare_tile.dart';
 import 'package:jump_scare_app/components/big_card.dart';
@@ -78,7 +77,9 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           BigCard(value: durationToString(_currTime)),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          IntrinsicWidth(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton.icon(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
@@ -98,7 +99,7 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
               label: Text(_isPlaying() ? "Pause" : "Play"),
               icon: Icon(_isPlaying() ? Icons.pause : Icons.play_arrow),
             ),
-          ]),
+          ])),
           SizedBox(height: 50),
           nextJumpScare == null
               ? const Text("No jump scares.")

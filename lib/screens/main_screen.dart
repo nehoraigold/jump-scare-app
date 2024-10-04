@@ -19,8 +19,21 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-    return appState.selectedMovie == null
-        ? MoviesScreen(_movies)
-        : MovieScreen(appState.selectedMovie!, () => appState.setMovie(null));
+    if (appState.selectedMovie != null) {
+      return MovieScreen(
+          appState.selectedMovie!, () => appState.setMovie(null));
+    }
+    return FutureBuilder(
+      future: _movies,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return MoviesScreen(snapshot.requireData);
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          return const Center(child: Text("Connection error!"));
+        }
+        return const Center(child: Text("No movies."));
+      },
+    );
   }
 }
