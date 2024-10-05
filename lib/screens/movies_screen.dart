@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 
 import "package:jump_scare_app/components/movie_tile.dart";
+import "package:jump_scare_app/model/movie.dart";
 
 class MoviesScreen extends StatefulWidget {
-  final List<String> allMovies;
+  final List<Movie> allMovies;
 
   MoviesScreen(this.allMovies, {super.key});
 
@@ -12,24 +13,24 @@ class MoviesScreen extends StatefulWidget {
 }
 
 class _MoviesScreenState extends State<MoviesScreen> {
-  List<String>? _movieTitles;
+  List<Movie>? _movies;
 
-  _MoviesScreenState(this._movieTitles);
+  _MoviesScreenState(this._movies);
 
   void _filterMovies(String search) {
-    _movieTitles =
-        widget.allMovies.where((title) => title.contains(search)).toList();
+    _movies =
+        widget.allMovies.where((movie) => movie.title.toLowerCase().contains(search.toLowerCase())).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     Widget movieTitles;
-    if (_movieTitles == null || _movieTitles!.isEmpty) {
+    if (_movies == null || _movies!.isEmpty) {
       movieTitles = const Center(child: Text("No movies."));
     } else {
       final tiles = <MovieTile>[];
-      for (final title in _movieTitles!) {
-        tiles.add(MovieTile(title));
+      for (final movie in _movies!) {
+        tiles.add(MovieTile(movie));
       }
       movieTitles = Wrap(children: tiles);
     }

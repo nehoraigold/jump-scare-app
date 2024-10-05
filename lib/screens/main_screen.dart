@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jump_scare_app/screens/movie_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jump_scare_app/app_state.dart';
 import 'package:jump_scare_app/http/client.dart';
+import 'package:jump_scare_app/model/movie.dart';
+import 'package:jump_scare_app/screens/movie_screen.dart';
 import 'package:jump_scare_app/screens/movies_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final Future<List<String>> _movies = client.getMovies();
+  Future<List<Movie>> allMovies = client.getMovies();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
           appState.selectedMovie!, () => appState.setMovie(null));
     }
     return FutureBuilder(
-      future: _movies,
+      future: allMovies,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return MoviesScreen(snapshot.requireData);
@@ -32,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
           print(snapshot.error);
           return const Center(child: Text("Connection error!"));
         }
-        return const Center(child: Text("No movies."));
+        return const Center(child: Text("Loading movies..."));
       },
     );
   }

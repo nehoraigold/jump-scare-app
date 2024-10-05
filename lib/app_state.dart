@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import "./model/movie.dart";
-import "./http/client.dart";
 
 class AppState extends ChangeNotifier {
   Movie? selectedMovie;
 
-  void setMovie(String? title) async {
-    if (title == null) {
+  void setMovie(Movie? movie) async {
+    if (movie == null) {
       selectedMovie = null;
     } else {
-      selectedMovie = await client.getMovie(title);
+      selectedMovie = movie;
     }
     notifyListeners();
   }
