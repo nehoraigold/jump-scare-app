@@ -10,6 +10,7 @@ List<Movie> movieListFromJson(String str) {
   final List<dynamic> jsonData = jsonDecode(str);
   return List<Movie>.from(jsonData.map((item) => Movie.fromJson(item)));
 }
+
 Movie movieFromJson(String str) => Movie.fromJson(json.decode(str));
 
 String movieToJson(Movie data) => json.encode(data.toJson());
@@ -56,7 +57,7 @@ class JumpScare {
 
   factory JumpScare.fromJson(Map<String, dynamic> json) => JumpScare(
         time: stringToDuration(json["time"]),
-        description: json["description"] ?? '', 
+        description: json["description"] ?? '',
         type: json["type"] == "major"
             ? JumpScareType.major
             : json["type"] == "minor"

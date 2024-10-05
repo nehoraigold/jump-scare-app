@@ -18,8 +18,10 @@ class _MoviesScreenState extends State<MoviesScreen> {
   _MoviesScreenState(this._movies);
 
   void _filterMovies(String search) {
-    _movies =
-        widget.allMovies.where((movie) => movie.title.toLowerCase().contains(search.toLowerCase())).toList();
+    _movies = widget.allMovies
+        .where(
+            (movie) => movie.title.toLowerCase().contains(search.toLowerCase()))
+        .toList();
   }
 
   @override
