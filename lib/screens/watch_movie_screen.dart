@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiver/async.dart';
 
 import 'package:jump_scare_app/utils/utils.dart';
@@ -46,11 +47,14 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
   void _startMovie() {
     metronome =
         Metronome.periodic(const Duration(seconds: 1), anchor: DateTime.now());
-    sub = metronome.listen((event) {
-      setState(() {
-        _onTick();
-      });
-    }, onDone: _pauseMovie);
+    sub = metronome.listen(
+      (event) {
+        setState(() {
+          _onTick();
+        });
+      },
+      onDone: _pauseMovie,
+    );
   }
 
   void _pauseMovie() {
@@ -61,11 +65,18 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
   void _onTick() {
     _currTime = Duration(seconds: _currTime.inSeconds + 1);
     final nextJumpScare = _nextJumpScare();
-    if (nextJumpScare != null) {
-      if (nextJumpScare.time.compareTo(_currTime) == 0) {
-        _jumpScareIndex++;
-      }
+    if (nextJumpScare == null) {
+      return;
     }
+
+    if (nextJumpScare.time.compareTo(_currTime) == 0) {
+      _onJumpScare();
+      _jumpScareIndex++;
+    }
+  }
+
+  void _onJumpScare() {
+    HapticFeedback.vibrate();
   }
 
   @override
@@ -83,9 +94,7 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
             ElevatedButton.icon(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
-                setState(() {
-                  _pauseMovie();
-                });
+                _pauseMovie();
                 widget.onBackButton();
               },
               label: const Text("Back"),
