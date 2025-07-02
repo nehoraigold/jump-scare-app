@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:jump_scare_app/components/playback_component.dart';
+import 'package:provider/provider.dart';
 
-import 'package:jump_scare_app/screens/watch_movie_screen.dart';
+import 'package:jump_scare_app/app_state.dart';
 import 'package:jump_scare_app/components/jump_scare_tile.dart';
 import 'package:jump_scare_app/model/movie.dart';
 
-class MovieScreen extends StatefulWidget {
+class MovieScreen extends StatelessWidget {
   final Movie movie;
   final Function() onBackButton;
 
   MovieScreen(this.movie, this.onBackButton);
 
   @override
-  State<MovieScreen> createState() => _MovieScreenState();
-}
-
-class _MovieScreenState extends State<MovieScreen> {
-  bool _isStarted = false;
-
-  @override
   Widget build(BuildContext context) {
-    if (_isStarted) {
-      return WatchMovieScreen(
-          movie: widget.movie,
-          onBackButton: () => {
-                setState(() {
-                  _isStarted = false;
-                })
-              });
+    final appState = context.watch<AppState>();
+
+    final widgets = <Widget>[];
+    if (appState.currTime.compareTo(const Duration()) != 0) {
+      widgets.add(PlaybackComponent());
+    } else {
+      widgets.add(ElevatedButton.icon(
+          icon: Icon(Icons.movie),
+          label: Text("Watch Movie"),
+          onPressed: () {
+            appState.startMovie();
+          }));
     }
-    final jumpScares = <JumpScareTile>[];
-    for (var js in widget.movie.jumpScares) {
-      jumpScares.add(JumpScareTile(js));
+
+    for (var js in movie.jumpScares) {
+      widgets.add(JumpScareTile(js));
     }
 
     return SafeArea(
@@ -39,24 +38,16 @@ class _MovieScreenState extends State<MovieScreen> {
         child: ListView(children: [
           Row(children: [
             BackButton(
-              onPressed: widget.onBackButton,
+              onPressed: onBackButton,
             ),
             Center(
                 child: Text(
-              widget.movie.title,
+              movie.title,
               style: Theme.of(context).textTheme.headlineLarge,
               textAlign: TextAlign.center,
             )),
           ]),
-          ElevatedButton.icon(
-              icon: Icon(Icons.movie),
-              label: Text("Watch Movie"),
-              onPressed: () {
-                setState(() {
-                  _isStarted = true;
-                });
-              }),
-          ...jumpScares,
+          ...widgets,
         ]),
       ),
     );
